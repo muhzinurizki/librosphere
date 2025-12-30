@@ -218,10 +218,10 @@ export default function Welcome({ auth, stats, categories, featuredBooks }) {
                                         </span>
                                     </h2>
                                 </div>
-                                <button className="group flex items-center gap-2 font-bold text-slate-900 hover:text-indigo-600 transition-all border-b-2 border-slate-100 pb-1">
+                                <Link href= {route("katalog.index")} className="group flex items-center gap-2 font-bold text-slate-900 hover:text-indigo-600 transition-all border-b-2 border-slate-100 pb-1">
                                     Jelajahi Katalog{" "}
                                     <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                </button>
+                                </Link>
                             </div>
 
                             {/* Dynamic Grid Layout */}
