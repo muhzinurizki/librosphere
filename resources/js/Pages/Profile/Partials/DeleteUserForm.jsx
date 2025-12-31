@@ -5,31 +5,17 @@ import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
+import { Trash2, ShieldAlert } from 'lucide-react';
 
 export default function DeleteUserForm({ className = '' }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const passwordInput = useRef();
 
-    const {
-        data,
-        setData,
-        delete: destroy,
-        processing,
-        reset,
-        errors,
-        clearErrors,
-    } = useForm({
-        password: '',
-    });
-
-    const confirmUserDeletion = () => {
-        setConfirmingUserDeletion(true);
-    };
+    const { data, setData, delete: destroy, processing, reset, errors } = useForm({ password: '' });
 
     const deleteUser = (e) => {
         e.preventDefault();
-
         destroy(route('profile.destroy'), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
@@ -40,77 +26,56 @@ export default function DeleteUserForm({ className = '' }) {
 
     const closeModal = () => {
         setConfirmingUserDeletion(false);
-
-        clearErrors();
         reset();
     };
 
     return (
-        <section className={`space-y-6 ${className}`}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Delete Account
-                </h2>
+        <section className={className}>
+            <p className="text-sm text-rose-700 font-medium mb-6">
+                Tindakan ini permanen. Pastikan Anda sudah mengembalikan semua buku sebelum menutup akun.
+            </p>
 
-                <p className="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Before deleting your account,
-                    please download any data or information that you wish to
-                    retain.
-                </p>
-            </header>
-
-            <DangerButton onClick={confirmUserDeletion}>
-                Delete Account
+            <DangerButton
+                onClick={() => setConfirmingUserDeletion(true)}
+                className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest"
+            >
+                <Trash2 className="w-4 h-4" /> Hapus Akun LibroSphere
             </DangerButton>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
-                <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
-                    </h2>
+                <form onSubmit={deleteUser} className="p-8">
+                    <div className="flex items-center gap-4 text-rose-600 mb-6">
+                        <div className="p-3 bg-rose-50 rounded-2xl">
+                            <ShieldAlert className="w-8 h-8" />
+                        </div>
+                        <h2 className="text-2xl font-black tracking-tight">Hapus Akun Permanen?</h2>
+                    </div>
 
-                    <p className="mt-1 text-sm text-gray-600">
-                        Once your account is deleted, all of its resources and
-                        data will be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete
-                        your account.
+                    <p className="text-slate-500 mb-8 leading-relaxed">
+                        Mohon masukkan kata sandi Anda untuk mengonfirmasi bahwa Anda ingin menghapus akun ini secara permanen.
                     </p>
 
-                    <div className="mt-6">
-                        <InputLabel
-                            htmlFor="password"
-                            value="Password"
-                            className="sr-only"
-                        />
-
+                    <div className="space-y-2">
+                        <InputLabel htmlFor="password" value="Password Konfirmasi" className="sr-only" />
                         <TextInput
                             id="password"
                             type="password"
                             name="password"
                             ref={passwordInput}
                             value={data.password}
-                            onChange={(e) =>
-                                setData('password', e.target.value)
-                            }
-                            className="mt-1 block w-3/4"
-                            isFocused
-                            placeholder="Password"
+                            onChange={(e) => setData('password', e.target.value)}
+                            className="w-full border-slate-200 rounded-xl"
+                            placeholder="Kata Sandi Anda"
                         />
-
-                        <InputError
-                            message={errors.password}
-                            className="mt-2"
-                        />
+                        <InputError message={errors.password} className="mt-2" />
                     </div>
 
-                    <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>
-                            Cancel
+                    <div className="mt-10 flex justify-end gap-3">
+                        <SecondaryButton onClick={closeModal} className="px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-xs">
+                            Batal
                         </SecondaryButton>
-
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
+                        <DangerButton className="px-6 py-3 rounded-xl font-black uppercase tracking-widest text-xs" disabled={processing}>
+                            Ya, Hapus Akun
                         </DangerButton>
                     </div>
                 </form>

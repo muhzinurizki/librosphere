@@ -2,7 +2,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, Book, Star, ArrowRight, X } from "lucide-react";
-import debounce from "lodash/debounce"; // Disarankan: npm install lodash
+import debounce from "lodash/debounce";
 
 export default function KatalogIndex({ categories, books, filters }) {
     const [search, setSearch] = useState(filters.search || "");
