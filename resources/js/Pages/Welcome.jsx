@@ -1,4 +1,5 @@
 import { Link, Head } from "@inertiajs/react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Search,
@@ -20,9 +21,12 @@ import {
     Library,
     Calendar,
     Quote,
+    Menu,
+    X,
 } from "lucide-react";
 
 export default function Welcome({ auth, stats, categories, featuredBooks }) {
+    const [isOpen, setIsOpen] = useState(false);
     // Variants untuk animasi staggered
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -78,7 +82,7 @@ export default function Welcome({ auth, stats, categories, featuredBooks }) {
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-4">
+                            <div className="hidden md:flex items-center gap-4">
                                 {auth.user ? (
                                     <Link
                                         href={route("dashboard")}
@@ -109,8 +113,75 @@ export default function Welcome({ auth, stats, categories, featuredBooks }) {
                                     </div>
                                 )}
                             </div>
+
+                            {/* Mobile Menu Button */}
+                            <div className="md:hidden flex items-center">
+                                <button
+                                    onClick={() => setIsOpen(!isOpen)}
+                                    className="p-2 text-slate-600 hover:text-indigo-600 transition-colors"
+                                >
+                                    {isOpen ? (
+                                        <X className="w-6 h-6" />
+                                    ) : (
+                                        <Menu className="w-6 h-6" />
+                                    )}
+                                </button>
+                            </div>
                         </div>
                     </div>
+
+                    {/* Mobile Menu Dropdown */}
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="md:hidden bg-white border-b border-slate-100 overflow-hidden"
+                            >
+                                <div className="px-4 pt-4 pb-6 space-y-4">
+                                    {["Katalog", "Kategori", "Prosedur"].map(
+                                        (item) => (
+                                            <a
+                                                key={item}
+                                                href={`#${item.toLowerCase()}`}
+                                                className="block text-base font-semibold text-slate-600 hover:text-indigo-600 hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors"
+                                                onClick={() => setIsOpen(false)}
+                                            >
+                                                {item}
+                                            </a>
+                                        )
+                                    )}
+                                    <div className="pt-4 border-t border-slate-100 space-y-3 px-4">
+                                        {auth.user ? (
+                                            <Link
+                                                href={route("dashboard")}
+                                                className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-100 transition-all"
+                                            >
+                                                Dashboard{" "}
+                                                <ArrowUpRight className="w-4 h-4" />
+                                            </Link>
+                                        ) : (
+                                            <>
+                                                <Link
+                                                    href={route("login")}
+                                                    className="block w-full text-center px-5 py-3 text-sm font-bold text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition"
+                                                >
+                                                    Masuk
+                                                </Link>
+                                                <Link
+                                                    href={route("register")}
+                                                    className="block w-full text-center px-6 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-indigo-600 transition shadow-lg shadow-slate-200"
+                                                >
+                                                    Jadi Anggota
+                                                </Link>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </nav>
 
                 <main>
@@ -218,7 +289,10 @@ export default function Welcome({ auth, stats, categories, featuredBooks }) {
                                         </span>
                                     </h2>
                                 </div>
-                                <Link href= {route("katalog.index")} className="group flex items-center gap-2 font-bold text-slate-900 hover:text-indigo-600 transition-all border-b-2 border-slate-100 pb-1">
+                                <Link
+                                    href={route("katalog.index")}
+                                    className="group flex items-center gap-2 font-bold text-slate-900 hover:text-indigo-600 transition-all border-b-2 border-slate-100 pb-1"
+                                >
                                     Jelajahi Katalog{" "}
                                     <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
@@ -465,14 +539,15 @@ export default function Welcome({ auth, stats, categories, featuredBooks }) {
                                     </h2>
                                 </div>
 
-                                <motion.button
+                                <Link
+                                    href={route("acara.index")}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     className="group px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center gap-3 shadow-xl shadow-slate-200 transition-all hover:bg-indigo-600"
                                 >
                                     Lihat Semua Acara
                                     <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
-                                </motion.button>
+                                </Link>
                             </div>
 
                             {/* Event List Layout */}

@@ -81,6 +81,50 @@ Route::get('/katalog', function () {
     ]);
 })->name('katalog.index');
 
+Route::get('/acara', function () {
+    $events = [
+        'data' => [
+            [
+                'id' => 1,
+                'title' => 'Bedah Buku: Filosofi Teras',
+                'date' => '2025-01-12',
+                'time' => '10:00 - 12:00',
+                'location' => 'Aula Utama LibroSphere',
+                'category' => 'Workshop',
+                'description' => 'Diskusi mendalam bersama praktisi mengenai penerapan stoisisme dalam kehidupan modern.',
+                'image' => 'https://via.placeholder.com/800x400?text=Bedah+Buku',
+                'status' => 'Mendatang'
+            ],
+            [
+                'id' => 2,
+                'title' => 'Workshop Menulis Digital',
+                'date' => '2025-01-15',
+                'time' => '13:00 - 15:00',
+                'location' => 'Ruang Multimedia',
+                'category' => 'Edukasi',
+                'description' => 'Pelatihan menulis artikel SEO dan teknik bercerita di media sosial.',
+                'image' => 'https://via.placeholder.com/800x400?text=Workshop+Menulis',
+                'status' => 'Pendaftaran Dibuka'
+            ],
+            [
+                'id' => 3,
+                'title' => 'Lomba Resensi Buku Nasional',
+                'date' => '2025-01-20',
+                'time' => 'Sepanjang Hari',
+                'location' => 'Online',
+                'category' => 'Lomba',
+                'description' => 'Tunjukkan kemampuan analisismu dan menangkan hadiah jutaan rupiah.',
+                'image' => 'https://via.placeholder.com/800x400?text=Lomba+Resensi',
+                'status' => 'Mendatang'
+            ],
+        ]
+    ];
+
+    return Inertia::render('Acara/Index', [
+        'events' => $events
+    ]);
+})->name('acara.index');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
