@@ -25,6 +25,7 @@
     "dependencies": {
         "clsx": "^2.1.1",
         "framer-motion": "^12.23.26",
+        "lodash": "^4.17.21",
         "lucide-react": "^0.562.0",
         "tailwind-merge": "^3.4.0"
     }
