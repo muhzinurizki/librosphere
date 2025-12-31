@@ -123,6 +123,14 @@ Route::get('/dashboard', function () {
   ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// dashboard admin
+use App\Http\Controllers\Admin\DashboardController;
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    // Rute manajemen buku akan di sini nanti
+});
+
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
